@@ -1,6 +1,5 @@
 package at.hannibal2.skyhanni.config.features
 
-import at.hannibal2.skyhanni.config.FeatureToggle
 import at.hannibal2.skyhanni.features.misc.update.ConfigVersionDeprecatedDisplay
 import at.hannibal2.skyhanni.features.misc.update.ConfigVersionDisplay
 import at.hannibal2.skyhanni.utils.OSUtils.openBrowser
@@ -28,13 +27,7 @@ class About {
     @ConfigEditorBoolean
     var checkForUpdates: Boolean = true
 
-    @ConfigOption(name = "Auto Updates", desc = "Automatically download new version on each startup")
-    @Expose
-    @FeatureToggle
-    @ConfigEditorBoolean
-    var fullAutoUpdates: Boolean = false
-
-    @ConfigOption(name = "Update Stream", desc = "How frequently you want updates for SkyHanni")
+    @ConfigOption(name = "Update Stream", desc = "How frequently you want update notifications for SkyHanni")
     @Expose
     @ConfigEditorDropdown
     val updateStream: Property<UpdateStream> = Property.of(UpdateStream.RELEASES)

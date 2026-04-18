@@ -71,7 +71,7 @@ object UpdateManager {
         if (hasCheckedForUpdate) return
         hasCheckedForUpdate = true
 
-        if (config.checkForUpdates || config.fullAutoUpdates)
+        if (config.checkForUpdates)
             checkUpdate()
     }
 
@@ -120,15 +120,7 @@ object UpdateManager {
                 potentialUpdate = it
                 if (it.isUpdateAvailable) {
                     updateState = UpdateState.AVAILABLE
-                    if (config.fullAutoUpdates || forceDownload) {
-                        ChatUtils.chat(
-                            componentBuilder {
-                                append("SkyHanni found a new update: ${it.update.versionName}, starting to download now.")
-                                withColor(ChatFormatting.GREEN)
-                            }
-                        )
-                        queueUpdate()
-                    } else if (config.checkForUpdates) {
+                    if (config.checkForUpdates) {
                         ChatUtils.chatAndOpenConfig(
                             "§aSkyHanni found a new update: ${it.update.versionName}. " +
                                 "Check §b/sh download update §afor more info.",
@@ -149,26 +141,6 @@ object UpdateManager {
                         }
                     )
                 }
-            },
-            Minecraft.getInstance(),
-        )
-    }
-
-    fun queueUpdate() {
-        if (updateState != UpdateState.AVAILABLE) {
-            logger.log("Trying to enqueue an update while another one is already downloaded or none is present")
-        }
-        updateState = UpdateState.QUEUED
-        activePromise = CompletableFuture.supplyAsync {
-            logger.log("Update download started")
-            potentialUpdate!!.prepareUpdate()
-        }.thenAcceptAsync(
-            {
-                logger.log("Update download completed, setting exit hook")
-                updateState = UpdateState.DOWNLOADED
-                potentialUpdate!!.executePreparedUpdate()
-                ChatUtils.chat("Download of update complete. ")
-                ChatUtils.chat("§aThe update will be installed after your next restart.")
             },
             Minecraft.getInstance(),
         )
@@ -202,8 +174,6 @@ object UpdateManager {
 
     enum class UpdateState {
         AVAILABLE,
-        QUEUED,
-        DOWNLOADED,
         NONE
     }
 
