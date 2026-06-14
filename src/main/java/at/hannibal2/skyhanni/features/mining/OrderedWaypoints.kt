@@ -279,7 +279,7 @@ object OrderedWaypoints {
 
         val (loadedRoute, formatName) = result
         orderedWaypointsList = loadedRoute.deepCopy()
-        currentOrderedWaypointIndex = orderedWaypointsList.minBy { waypoint -> waypoint.location.distanceSqToPlayer() }.number - 1
+        currentOrderedWaypointIndex = 0
         renderWaypoints.clear()
         ChatUtils.chat("Loaded ${orderedWaypointsList.size} ordered waypoints! (§e$formatName§r)")
 
